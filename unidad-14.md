@@ -295,6 +295,49 @@ Esta lista es el equivalente de rendimiento al recorrido de accesibilidad de la 
 
 ---
 
+## Ejemplo práctico · Landing page optimizada para Core Web Vitals
+
+```html
+<head>
+  <!-- 1. CSS Crítico inline (< 14 KB en primer paquete TCP) -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    body { font-family: system-ui, sans-serif; }
+    .hero { min-height: 60svh; background: #0f172a; color: #fff; }
+  </style>
+  <!-- 2. CSS no crítico diferido: carga asíncrona sin bloquear render -->
+  <link rel="preload" href="css/resto.css" as="style" onload="this.rel='stylesheet'">
+</head>
+```
+
+```css
+/* 3. Omitir cálculo de layout en secciones bajo el pliegue */
+.seccion-galeria {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px; /* Altura estimada para la barra de scroll */
+}
+
+/* 4. Cero saltos acumulados de diseño (CLS = 0) */
+.hero__img {
+  width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+}
+```
+
+<span class="fragment">CSS Crítico en línea elimina peticiones bloqueantes en el primer render (FCP / LCP)</span>
+
+<span class="fragment"><code>content-visibility: auto</code> ahorra tiempo de cálculo en elementos fuera de pantalla</span>
+
+<span class="fragment"><code>aspect-ratio: 16 / 9</code> reserva el área exacta de imágenes previniendo CLS</span>
+
+Note:
+Arquitectura de máximo rendimiento frontend y Core Web Vitals:
+1. Límite de 14 KB: corresponde a la ventana inicial de congestión TCP (initcwnd de 10 paquetes de ~1460 bytes). Al meter el CSS de la cabecera y el hero en línea por debajo de ese peso, el navegador pinta el primer fotograma útil sin requerir un segundo viaje de ida y vuelta (Round Trip Time).
+2. rel="preload" con onload: descarga la hoja de estilos secundaria en segundo plano sin pausar el parser HTML del navegador.
+3. content-visibility: auto: instruye al motor a omitir el cálculo de layout y pintura de secciones largas hasta que el usuario hace scroll hacia ellas, multiplicando por 10 la velocidad de carga inicial.
+4. contain-intrinsic-size: evita el desagradable efecto de encogimiento de la barra de desplazamiento cuando las secciones aún no se han renderizado.
+
+---
+
 ## Error común: rendimiento mal diagnosticado
 
 ⚠ `will-change` en `*`: RAM y capas huérfanas

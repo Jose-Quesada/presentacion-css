@@ -69,6 +69,33 @@ CSS nació para liberar a HTML de la maquetación: antes se maquetaba con tablas
 Note:
 Estas seis ventajas son la respuesta completa al CE 2.g. La de consistencia es la que pide el RA 2 del 0615 cuando habla de interfaces homogéneas. La de accesibilidad es la que conecta con el RA 5: sin hojas de estilo no hay adaptación posible al usuario.
 
+--
+
+## ¿Cómo funciona CSS por debajo? (El motor del navegador)
+
+```mermaid
+graph LR
+  A[HTML] --> DOM[DOM Tree]
+  B[CSS] --> CSSOM[CSSOM Tree]
+  DOM --> RT[Render Tree]
+  CSSOM --> RT
+  RT --> L[Layout / Reflow<br>geometría y px]
+  L --> P[Paint<br>colores y capas]
+  P --> C[Composite<br>GPU]
+```
+
+<span class="fragment"><strong>Render Tree:</strong> Solo incluye lo visible (ignora <code>display: none</code> y <code>&lt;head&gt;</code>)</span>
+
+<span class="fragment"><strong>Layout/Reflow:</strong> Cambiar <code>width</code> o <code>margin</code> recalcula geometría (costoso)</span>
+
+<span class="fragment"><strong>Composite en GPU:</strong> Animar <code>transform</code> u <code>opacity</code> es ultrarrápido (60 fps)</span>
+
+Note:
+Explicación clave de rendimiento para el alumnado:
+1. CSS no pinta directamente sobre el HTML: se crea un árbol de objetos de estilo (CSSOM) y se funde con el DOM.
+2. display: none no está en el Render Tree; visibility: hidden sí está en el Render Tree porque ocupa espacio en blanco.
+3. El rendimiento web depende de evitar Reflows innecesarios.
+
 ---
 
 ## Sintaxis · Anatomía de una regla
@@ -256,6 +283,25 @@ Cada !important que añadéis obliga al siguiente a poner otro, y así indefinid
 Note:
 Saber qué propiedades se heredan evita repetir la misma regla en cada bloque del documento. La pregunta clásica de examen es diferenciar initial, inherit, unset y revert, y aparece casi siempre. El reset y la normalize son el aplicado práctico de estas palabras clave al arrancar un proyecto.
 
+--
+
+## ¿Por qué el texto se hereda y las cajas no?
+
+<span class="fragment"><strong>Sentido común del diseño:</strong> Quieres que la fuente y color del <code>&lt;body&gt;</code> bajen solos a párrafos, enlaces y listas.</span>
+
+<span class="fragment"><strong>Independencia espacial:</strong> Si <code>border</code> o <code>margin</code> se heredasen, ¡poner un borde a una sección llenaría de bordes a cada palabra dentro de ella!</span>
+
+<span class="fragment"><code>inherit</code>: fuerza a adoptar el valor del padre directo (ej: tipografía en botones y formularios)</span>
+
+<span class="fragment"><code>initial</code>: valor estándar de la W3C (cuidado: rompe la herencia tipográfica)</span>
+
+<span class="fragment"><code>revert</code>: deshace tus estilos y devuelve la apariencia nativa del navegador</span>
+
+Note:
+Explicación para el aula:
+1. Controles como <button> e <input> rompen la herencia por defecto en el navegador; por eso en reset se pone font-family: inherit.
+2. revert es ideal cuando has sobrecargado un botón o diálogo y quieres que vuelva a comportarse como el elemento nativo del sistema.
+
 ---
 
 ## Valores, funciones y unidades
@@ -289,6 +335,55 @@ Todo valor dimensional cae en una de estas cuatro categorías: número, longitud
 
 Note:
 Las tres herramientas cubren niveles distintos: Jigsaw valida, stylelint previene y DevTools explica. En el examen hay que citar las tres y saber qué detecta cada una de ellas. Abre las DevTools antes de preguntar por qué un estilo no se aplica: el noventa por ciento se resuelve ahí.
+
+---
+
+## Ejemplo práctico · Tarjeta con capas (@layer), tokens y herencia
+
+```css
+@layer reset, tema, componentes; /* Orden de prioridad explícito */
+
+@layer tema {
+  :root {
+    --color-primario: #0d47a1;
+    --radio-borde: 8px;
+    --fuente-base: system-ui, sans-serif;
+  }
+}
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; }
+  button { font-family: inherit; } /* Fuerza herencia en controles */
+}
+
+@layer componentes {
+  .tarjeta-curso {
+    border: 1px solid #e0e0e0;
+    border-radius: var(--radio-borde);
+    padding: 1.5rem;
+    max-width: 320px;
+    font-family: var(--fuente-base);
+  }
+  .tarjeta-curso__titulo { color: var(--color-primario); margin-bottom: .5rem; }
+  .tarjeta-curso__boton {
+    background: var(--color-primario); color: #fff;
+    border: none; padding: .5rem 1rem; border-radius: 4px; cursor: pointer;
+  }
+}
+```
+
+<span class="fragment"><code>@layer</code> declara la jerarquía: la última capa (<code>componentes</code>) vence a <code>reset</code></span>
+
+<span class="fragment">Tokens centralizados en <code>:root</code> consumidos con <code>var()</code></span>
+
+<span class="fragment"><code>inherit</code> restablece la tipografía en <code>&lt;button&gt;</code> e <code>&lt;input&gt;</code></span>
+
+Note:
+Arquitectura moderna de CSS sin deuda técnica:
+1. Declaración inicial @layer reset, tema, componentes: establece el orden de la cascada. Una regla en componentes siempre gana sobre reset sin necesidad de usar !important ni aumentar artificialmente la especificidad.
+2. :root almacena las variables CSS (tokens de diseño) accesibles en todo el árbol DOM.
+3. button rompe por defecto del User Agent la herencia de font-family; font-family: inherit lo reconecta con la tipografía corporativa.
+4. Metodología BEM (.tarjeta-curso__titulo) garantiza nombres semánticos y componentes autocontenidos.
 
 ---
 

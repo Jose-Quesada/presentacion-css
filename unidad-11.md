@@ -324,6 +324,48 @@ Es el ejemplo canónico de micro-interacción barata: dos propiedades declaradas
 
 ---
 
+## Ejemplo práctico · Microinteracciones 3D a 60 fps y accesibilidad
+
+```css
+/* 1. Escena tridimensional y composición en GPU */
+.escena-tarjeta {
+  perspective: 1000px; /* Profundidad de campo visual */
+}
+
+.tarjeta-3d {
+  transform-style: preserve-3d;
+  /* Curva física personalizada: efecto rebote elástico */
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tarjeta-3d:hover, .tarjeta-3d:focus-within {
+  transform: rotateY(180deg); /* Animación exclusiva en Composite */
+}
+
+/* 2. Accesibilidad motriz y vestibular (Criterio WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta-3d {
+    transition: none;
+    transform: none !important;
+  }
+}
+```
+
+<span class="fragment">Propiedades de composición pura (<code>transform</code>) que no provocan Layout ni Paint</span>
+
+<span class="fragment"><code>perspective</code> + <code>preserve-3d</code> habilitan profundidad tridimensional real</span>
+
+<span class="fragment"><code>prefers-reduced-motion: reduce</code> apaga animaciones para evitar mareos vestibulares</span>
+
+Note:
+Rendimiento a 60 fotogramas por segundo y diseño inclusivo:
+1. Rendimiento GPU: al animar exclusivamente transform y opacity, el navegador delega el render en la tarjeta gráfica sin recalcular la geometría del documento (Layout) ni rellenar píxeles (Paint).
+2. Curvas de animación: cubic-bezier(0.34, 1.56, 0.64, 1) crea un micro-rebote orgánico muy superior a la función lineal o ease genérica.
+3. Accesibilidad vestibular: WCAG 2.3.3 exige ofrecer alternativas o desactivación para usuarios que experimentan náuseas o vértigo ante animaciones de giro o zoom continuo.
+4. focus-within garantiza que usuarios que navegan mediante teclado también puedan activar la interacción al pulsar Tab.
+
+---
+
 ## Error común: animar sin control
 
 ⚠ `transition: all` en `*`: repaint constante

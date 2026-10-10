@@ -84,6 +84,29 @@ Las cuatro capas son concéntricas: de dentro hacia fuera contenido, padding, bo
 Note:
 `box-sizing` es la propiedad que más cambia el resultado final del CSS. La pregunta de examen clásica es calcular el ancho de una caja en los dos modos: con `width: 300px`, `padding: 20px` y `border: 5px`, una caja mide 350 px en `content-box` y 300 px en `border-box`. Preguntad siempre en qué modo estáis calculando.
 
+--
+
+## Cálculo matemático: content-box vs border-box
+
+```text
+Caso: width: 300px; padding: 20px; border: 10px;
+```
+
+<span class="fragment"><strong>content-box (suma hacia fuera):</strong><br>
+300px + 20px (izq) + 20px (der) + 10px (izq) + 10px (der) = <mark>360px en pantalla</mark></span>
+
+<span class="fragment"><strong>border-box (resta hacia dentro):</strong><br>
+La caja mide exactamente <mark>300px en pantalla</mark>.<br>
+El contenido interior se encoge a: 300 − 40 − 20 = 240px</span>
+
+<span class="fragment"><strong>¿Por qué rompe layouts content-box?</strong> Dos cajas al 50% con 10px de padding superan el 100% y una cae a la línea siguiente.</span>
+
+Note:
+Detalles clave para el aula:
+1. Con content-box, añadir padding o borde agranda la caja visualmente.
+2. Con border-box, añadir padding o borde encoge el contenido sin alterar el tamaño exterior de la caja.
+3. El margen exterior (margin) NUNCA forma parte de width en ninguno de los dos modos.
+
 ---
 
 ## Ejemplo · Reset universal de caja
@@ -187,6 +210,23 @@ Dos márgenes verticales de bloques que se tocan <mark>no se suman</mark>: colap
 Note:
 El colapso es el concepto más examinado del CSS clásico. La regla es corta: verticales, mismo contexto de formato, y nos quedamos con el mayor. Por eso un hueco «mágico» entre párrafos casi nunca es un error de suma, sino un colapso. El síntoma clásico es un espacio que parece más grande de lo que habéis escrito.
 
+--
+
+## ¿Por qué existe el colapso de márgenes?
+
+<span class="fragment"><strong>Origen editorial/tipográfico:</strong> En libros y periódicos, un título con margen inferior de 20px y un párrafo con margen superior de 16px deben separarse 20px, no una zanja de 36px.</span>
+
+<span class="fragment"><strong>Entre hermanos:</strong> Párrafo A (bottom 30px) + Párrafo B (top 20px) $\rightarrow$ hueco real = <mark>Max(30, 20) = 30px</mark></span>
+
+<span class="fragment"><strong>Padre e hijo («el margen que escapa»):</strong> Si el contenedor no tiene borde ni padding superior, el margen del hijo atraviesa al padre y baja todo el contenedor</span>
+
+<span class="fragment"><strong>Regla sagrada de examen:</strong> En horizontal <strong>NUNCA colapsan</strong> (dos botones con 10px de margen siempre dejan 20px).</span>
+
+Note:
+Explicación clave para el aula:
+El navegador fusiona márgenes verticales que se tocan físicamente.
+Para evitar el colapso padre-hijo, la solución moderna recomendada es display: flow-root en el contenedor.
+
 ---
 
 ## El hijo que empuja al padre
@@ -280,6 +320,45 @@ Este esquema es el que dibujaríamos en la pizarra para resolver cualquier ejerc
 
 Note:
 La contención le declara al navegador que ciertas partes del render son independientes y se pueden optimizar. Así las listas largas o los widgets pesados aíslan su impacto sobre el resto de la página. Fijaos en la advertencia de `size`: sin `contain-intrinsic-size` la caja se quedaría vacía. Lo veremos a fondo en la unidad de rendimiento, pero conviene reconocerlo aquí.
+
+---
+
+## Ejemplo práctico · Tarjeta de producto con BFC y aspect-ratio
+
+```css
+*, *::before, *::after {
+  box-sizing: border-box; /* Padding y border incluidos en el ancho */
+}
+
+.tarjeta-producto {
+  display: flow-root;    /* Crea BFC: contiene floats y márgenes colapsados */
+  max-width: 50ch;       /* Medida óptima de lectura editorial */
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-inline: auto;   /* Centrado horizontal lógico */
+}
+
+.tarjeta-producto__imagen {
+  width: 100%;
+  aspect-ratio: 16 / 9;  /* Reserva proporción 16:9 exacta (CLS = 0) */
+  object-fit: cover;
+  display: block;
+}
+```
+
+<span class="fragment"><code>box-sizing: border-box</code> hace predecible el dimensionado exacto de las cajas</span>
+
+<span class="fragment"><code>display: flow-root</code> crea un BFC limpio sin recortar tooltips ni sombras</span>
+
+<span class="fragment"><code>aspect-ratio: 16 / 9</code> evita saltos visuales antes de descargar la imagen</span>
+
+Note:
+Conceptos clave del modelo de caja aplicados:
+1. box-sizing: border-box: evita el cálculo tedioso width + padding + border. El ancho especificado es el tamaño exterior final del elemento.
+2. display: flow-root: establece un nuevo contexto de formateo en bloque (BFC). A diferencia de overflow: hidden, no recorta elementos que sobresalgan como dropdowns o sombras exteriores.
+3. aspect-ratio: 16 / 9: calcula la altura automáticamente según el ancho disponible, previniendo el desfase acumulado de diseño (Cumulative Layout Shift).
+4. max-width: 50ch: limita el ancho a 50 caracteres del glifo '0', respetando las directrices de ergonomía visual y legibilidad.
 
 ---
 

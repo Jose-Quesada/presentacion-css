@@ -345,6 +345,56 @@ Este es exactamente el ejercicio E11 del banco de prácticas, y sale en el exame
 
 ---
 
+## Ejemplo práctico · Arquitectura con @property, nesting nativo y BEM
+
+```css
+/* 1. Variable fuertemente tipada: permite interpolación matemática */
+@property --angulo-borde {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* 2. Nesting CSS nativo combinado con metodología BEM */
+.tarjeta-producto {
+  padding: 1.5rem;
+  border-radius: 12px;
+  background-color: #ffffff;
+
+  &__titulo {
+    font-size: 1.25rem;
+    color: var(--color-texto);
+  }
+
+  &--destacada {
+    border: 3px solid transparent;
+    background-image: linear-gradient(#fff, #fff),
+                      conic-gradient(from var(--angulo-borde), #3b82f6, #ec4899, #3b82f6);
+    background-origin: padding-box, border-box;
+    background-clip: padding-box, border-box;
+    animation: rotar 3s linear infinite;
+  }
+
+  &:hover { transform: translateY(-4px); }
+}
+
+@keyframes rotar { to { --angulo-borde: 360deg; } }
+```
+
+<span class="fragment"><code>@property</code> dota a las variables de tipo sintáctico permitiendo animar degradados</span>
+
+<span class="fragment">Nesting nativo (<code>&amp;</code>) estructura módulos BEM legibles sin compiladores Sass</span>
+
+<span class="fragment">Arquitectura limpia: separación estricta entre bloque, elemento y modificador</span>
+
+Note:
+Arquitectura vanguardista sin dependencias externas:
+1. @property: el navegador por defecto trata las CSS variables como texto plano, imposibilitando calcular pasos intermedios en una transición. Al declarar syntax: '<angle>', el motor comprende los grados y puede animar degradados cónicos en tiempo real con @keyframes.
+2. Nesting nativo: la especificación CSS oficial ya permite anidar selectores directamente (&__titulo, &--destacada, &:hover), eliminando la necesidad obligatoria de Sass o preprocesadores en muchos proyectos.
+3. Metodología BEM: garantiza predictibilidad y especificidad baja constante (0-1-0), facilitando el trabajo escalable en equipos de desarrollo.
+
+---
+
 ## Error común: variables y capas sin sistema
 
 ⚠ `var(color-marca)` sin `--` muere en silencio

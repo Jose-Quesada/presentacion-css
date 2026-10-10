@@ -156,6 +156,22 @@ Un contexto de apilamiento es una capa aislada con su propia escalera de z-index
 Note:
 Esta es la regla que resuelve el 90% de los problemas de capas: cada contexto compite solo con sus hermanos. Por eso subir el z-index del hijo no siempre funciona. Si el padre no crea contexto, el hijo compite en la escala global; si lo crea, queda atrapado dentro. Preguntad siempre: ¿quién crea contexto aquí?
 
+--
+
+## La analogía del rascacielos: ¿Por qué z-index falla?
+
+<span class="fragment"><strong>Edificio A (1 planta):</strong> Una persona se sube a una mesa de 10 metros de altura (<code>z-index: 99999</code>).</span>
+
+<span class="fragment"><strong>Edificio B (10 plantas):</strong> Otra persona está en el suelo de la segunda planta (<code>z-index: 2</code>).</span>
+
+<span class="fragment"><strong>¿Quién está más alto en el cielo?</strong> La persona del Edificio B. No importa lo alta que sea la mesa: está atrapada en el techo de su edificio de 1 planta.</span>
+
+<span class="fragment"><strong>En CSS:</strong> Cada contexto de apilamiento (creado por <code>opacity &lt; 1</code> o <code>transform</code>) es un edificio cerrado. El <code>z-index</code> de los hijos jamás traspasa el techo de su padre.</span>
+
+Note:
+Explicación para el aula:
+Cuando un alumno dice "He puesto z-index: 999999 y sigue tapado por el menú", la causa es que su componente está dentro de un padre con contexto de apilamiento inferior. La solución es subir el z-index del padre, no inflar números astronómicos en los hijos.
+
 ---
 
 ## Escala de z-index con variables
@@ -277,6 +293,49 @@ graph TB
 
 Note:
 Este es el orden de apilamiento de atrás hacia delante dentro de un mismo contexto. Los elementos positioned con z-index auto o cero se resuelven por orden del DOM, y los positivos siempre por encima. Dibujad esta escalera en el examen antes de responder. El fondo del contexto siempre va el primero.
+
+---
+
+## Ejemplo práctico · Esquema completo de posicionamiento y z-index
+
+```css
+/* 1. Cabecera adhesiva en el flujo */
+.cabecera-sticky {
+  position: sticky; top: 0;
+  z-index: 100;
+  background-color: #ffffff;
+}
+
+/* 2. Contenedor relativo con elemento absoluto superpuesto */
+.tarjeta-curso {
+  position: relative;
+  isolation: isolate; /* Aísla el contexto de apilamiento */
+}
+.tarjeta-curso__badge {
+  position: absolute; top: -8px; right: -8px;
+  z-index: 1;
+}
+
+/* 3. Modal flotante anclado al viewport */
+.dialogo-modal {
+  position: fixed; inset: 0;
+  margin: auto; width: min(90vw, 400px);
+  z-index: 1000;
+}
+```
+
+<span class="fragment"><code>sticky top: 0</code> mantiene la navegación a la vista sin arrancarla del flujo</span>
+
+<span class="fragment"><code>position: relative</code> actúa como bloque contenedor de la insignia absoluta</span>
+
+<span class="fragment"><code>isolation: isolate</code> blinda los <code>z-index</code> internos evitando batallas globales</span>
+
+Note:
+Las cuatro estrategias de posicionamiento conviviendo en armonía:
+1. position: sticky: se desplaza en el flujo hasta alcanzar el umbral top: 0, donde queda fijado sin alterar las coordenadas de los hermanos.
+2. position: absolute: busca el ancestro posicionado más próximo (position != static). La tarjeta con position: relative se convierte en su marco de coordenadas.
+3. isolation: isolate: crea un nuevo Stacking Context sin tener que inventar opacidades o transforms ficticios. Los z-index de los hijos quedan confinados en la tarjeta.
+4. position: fixed: escapa del scroll y se dimensiona respecto a la ventana gráfica (viewport).
 
 ---
 

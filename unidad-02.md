@@ -120,6 +120,32 @@ Los selectores de atributo estilizan según lo que diga el propio HTML sin añad
 Note:
 Los combinadores son el pegamento que define el contexto de búsqueda. La confusión clásica es entre más y tilde: el primero exige inmediación y el segundo no. El descendiente además no pide parentesco directo: basta con que esté por debajo en el árbol del documento.
 
+--
+
+## Combinadores con lupa: ¿A quién afecta?
+
+```html
+<article>
+  <h2>Título</h2>
+  <p>Párrafo 1 (inmediato tras h2)</p>
+  <div><p>Párrafo 2 (dentro de un div)</p></div>
+  <p>Párrafo 3 (hermano posterior)</p>
+</article>
+```
+
+<span class="fragment"><code>article p</code> (descendiente): selecciona los <strong>3 párrafos</strong> (cualquier profundidad)</span>
+
+<span class="fragment"><code>article &gt; p</code> (hijo directo): selecciona párrafos 1 y 3 (excluye al párrafo 2 del <code>div</code>)</span>
+
+<span class="fragment"><code>h2 + p</code> (hermano adyacente): <strong>solo el Párrafo 1</strong> (justo a continuación)</span>
+
+<span class="fragment"><code>h2 ~ p</code> (hermanos generales): selecciona párrafos 1 y 3 (comparten padre)</span>
+
+Note:
+Regla para el examen:
+1. El espacio no exige ser padre e hijo; llega hasta el infinito del árbol.
+2. Los combinadores de hermanos (+ y ~) solo buscan hacia abajo en el documento, nunca hacia arriba.
+
 ---
 
 ## Pseudo-clases estructurales
@@ -258,7 +284,7 @@ El doble dos puntos es la marca del pseudo-elemento y el simple el de la pseudo-
   width: 1em;
   height: 1em;
   background: currentColor;
-  mask: url("icon.svg") center / contain no-repeat;
+  mask: url("https://dummyimage.com/800x600/ccc/000.png&text=icon.svg") center / contain no-repeat;
 }
 .cita::before { content: open-quote; }
 ```
@@ -291,6 +317,43 @@ div::before  { color: gray; }   /* 0-0-2 : tipo + pseudo-elemento */
 
 Note:
 La especificidad se calcula sobre el selector completo, incluidas pseudo-clases y pseudo-elementos. La estrategia profesional no es ganar la guerra de especificidad, sino no declararla: clases cortas, dos niveles como mucho y @layer para ordenar. Si os sobran !important, el problema es de arquitectura.
+
+---
+
+## Ejemplo práctico · Selectores modernos y relacionales (:has, :is, :not)
+
+```css
+/* 1. Combinador adyacente: primer párrafo tras titular */
+h1 + p { font-style: italic; color: #555; }
+
+/* 2. Pseudo-clase estructural: filas alternas en tabla */
+.tabla-inventario tr:nth-child(even) { background-color: #f9f9f9; }
+
+/* 3. Selector relacional :has() (selector de padre nativo) */
+.tarjeta-producto:has(button:disabled) {
+  opacity: 0.6;
+  filter: grayscale(1);
+}
+
+/* 4. Pseudo-clases lógicas :is() y :not() */
+:is(button, a.boton):not(:disabled) {
+  cursor: pointer;
+  transform: scale(1.02);
+}
+```
+
+<span class="fragment"><code>:has()</code> evalúa los descendientes para aplicar estilos al elemento contenedor</span>
+
+<span class="fragment"><code>:nth-child(even)</code> automatiza el diseño cebra sin clases manuales en el HTML</span>
+
+<span class="fragment"><code>:is()</code> agrupa selectores tomando la especificidad del más pesado</span>
+
+Note:
+Guía didáctica de selectores avanzados:
+1. h1 + p selecciona únicamente el párrafo inmediatamente adyacente tras el h1, ideal para entradillas periodísticas.
+2. :has() resuelve la mayor demanda histórica de CSS: actuar como selector de padre. Si la tarjeta contiene un botón deshabilitado (sin stock), toda la tarjeta atenúa su opacidad sin necesidad de manipular clases con JavaScript.
+3. :is(button, a.boton) evita duplicar reglas CSS para elementos con aspecto idéntico.
+4. :not(:disabled) excluye estados inactivos asegurando interactividad limpia.
 
 ---
 

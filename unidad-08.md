@@ -290,6 +290,44 @@ Este es el orden de trabajo profesional: primero el token de marca, después las
 
 ---
 
+## Ejemplo práctico · Cotización financiera con tipografía fluida y OKLCH
+
+```css
+:root {
+  /* Tokens en espacio perceptual OKLCH y color-mix */
+  --verde-alza: oklch(60% 0.18 145);
+  --fondo-badge: color-mix(in oklab, var(--verde-alza) 15%, transparent);
+}
+
+.panel-financiero {
+  min-height: 100dvh;  /* Adapta la altura con barras móviles dinámicas */
+  padding: clamp(1rem, 2vw + 0.5rem, 3rem);
+}
+
+.cifra-valor {
+  /* Tipografía fluida sin saltos bruscos de media queries */
+  font-size: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+  /* Ancho idéntico por dígito: previene temblor de columnas */
+  font-variant-numeric: tabular-nums;
+  color: var(--verde-alza);
+}
+```
+
+<span class="fragment"><code>clamp(min, preferido, max)</code> crea escalado tipográfico fluido y continuo</span>
+
+<span class="fragment"><code>tabular-nums</code> alinea decimales en cifras numéricas en tiempo real</span>
+
+<span class="fragment"><code>100dvh</code> garantiza cobertura del viewport sin desfases por barras del navegador</span>
+
+Note:
+Diseño visual de precisión con CSS moderno:
+1. clamp(1.5rem, 1rem + 2.5vw, 3rem): el titular se expande fluidamente desde pantallas móviles (1.5rem) hasta ultra-panorámicas (3rem) sin un solo breakpoint rígido.
+2. font-variant-numeric: tabular-nums: en fuentes proporcionales, el dígito '1' es más estrecho que el '8'. Al actualizar cotizaciones financieras, las columnas tiemblan y bailan. Con tabular-nums todos los dígitos adquieren el mismo ancho monospaciado.
+3. OKLCH y color-mix: genera contrastes cromáticos matemáticamente predecibles sin ensuciar la paleta.
+4. 100dvh (dynamic viewport height): resuelve el eterno bug de 100vh en móviles cuando la barra de navegación del navegador se oculta al hacer scroll.
+
+---
+
 ## Error común: medidas y contraste que no escalan
 
 ⚠ `font-size` y `line-height` en px: el texto deja de escalar (WCAG 1.4.4)

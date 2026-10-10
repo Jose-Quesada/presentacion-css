@@ -69,40 +69,37 @@ Los resultados de aprendizaje dicen lo que hay que saber hacer; los criterios de
 
 | Norma | Qué establece |
 |---|---|
-| **RD 686/2010** | Título de DAW y mínimos |
-| RD 1538/2006 | Ordenación general de la FP |
-| LOE · LOMLOE | Marco legal y digital |
+| **RD 686/2010** | Título de DAW (Web) y enseñanzas mínimas |
+| **RD 453/2010** | Título de DAM (Multiplataforma) y enseñanzas mínimas |
+| **LO 3/2022 · RD 659/2023** | Nuevo sistema de Formación Profesional |
+| **RD 1112/2018** | Accesibilidad obligatoria en web y apps (UNE-EN 301549) |
 
 <span class="fragment">Las <mark>enseñanzas mínimas</mark> se amplían, nunca se recortan</span>
 
-<span class="fragment">El ciclo tiene <mark>2.000 horas</mark> repartidas en dos cursos</span>
+<span class="fragment">Ciclos de <mark>2.000 horas</mark> en dos cursos lectivos</span>
 
-<span class="fragment">0612 y 0615: módulos de <mark>unidades de competencia</mark></span>
+<span class="fragment">Módulos de interfaces: 0373 (LMH) y 0615 (DIW) en DAW; 0488 (DI) en DAM</span>
 
 Note:
-El RD 686/2010 es la referencia estatal: fija módulos, duración, equipamientos y perfil docente. Las enseñanzas mínimas se dan por supuestas en el examen, pero conviene saber de dónde salen. Ojo al citarlo como norma andaluza: el desarrollo autonómico es otra disposición distinta. Los módulos asociados a unidades de competencia son los que reconocen conocimientos ya adquiridos en el trabajo.
+El marco normativo estatal fija los títulos y enseñanzas mínimas: RD 686/2010 para DAW y RD 453/2010 para DAM, bajo la Ley Orgánica 3/2022 y el RD 659/2023 de ordenación de la FP. Además, el RD 1112/2018 obliga por ley a garantizar la accesibilidad digital conforme a la norma UNE-EN 301549 y los estándares WCAG AA.
 
 ---
 
 ## Nivel autonómico · Andalucía
 
-<span class="fragment"><mark>Orden de 16 de junio de 2011</mark>, BOJA n.º 149, de 1 de agosto de 2011</span>
+| Ciclo Formativo | Orden Andaluza | Publicación oficial |
+|---|---|---|
+| **DAW** (Web) | Orden de 16 de junio de 2011 | **BOJA n.º 149**, de 1 de agosto de 2011 |
+| **DAM** (Multiplataforma) | Orden de 16 de junio de 2011 | **BOJA n.º 150**, de 1 de agosto de 2011 |
 
-<span class="fragment">Desarrolla RA, CE, contenidos, duración y orientaciones pedagógicas</span>
+<span class="fragment">Desarrollan RA, CE, contenidos, duración y orientaciones pedagógicas</span>
 
 <span class="fragment">Es la <mark>norma de referencia</mark> de las programaciones didácticas</span>
 
-<span class="fragment">El Decreto 436/2008 ordena la FP y faculta a la Consejería</span>
-
-<span class="fragment">Incluye <mark>3 horas de libre configuración</mark> por departamento</span>
-
-<div style="font-size: 1em; text-align: left;">
-
-Comprobad siempre en el <mark>BOJA</mark> si hay órdenes posteriores antes de citar la norma en un trabajo formal.
-</div>
+<span class="fragment">Incluyen <mark>3 horas de libre configuración</mark> por departamento</span>
 
 Note:
-La Orden de 2011 es la que os afecta directamente en clase: de ella salen los RA y los CE que se evalúan. Las horas de libre configuración son el hueco legal donde cabe el CSS avanzado que no aparece literalmente en los contenidos. Si citáis la norma sin comprobar su vigencia, una enmienda posterior dejaría vuestro trabajo desactualizado.
+La Junta de Andalucía publicó el mismo día las dos órdenes de desarrollo curricular: BOJA 149 para DAW y BOJA 150 para DAM. De ellas salen los RA y CE que se evalúan. Las horas de libre configuración permiten abordar tecnologías CSS de última generación (como subgrid o container queries) que no estaban explícitamente en el texto de 2011.
 
 ---
 
@@ -110,23 +107,23 @@ La Orden de 2011 es la que os afecta directamente en clase: de ella salen los RA
 
 ```mermaid
 graph LR
-  E[RD 686/2010<br>BOE · mínimos] --> A[Orden 16/06/2011<br>BOJA 149 · Andalucía]
-  A --> P[Programación<br>del centro]
-  P --> D[Clase<br>unidades 00–15]
+  E[RD 686/2010 · RD 453/2010<br>BOE · Mínimos Estatales] --> A[Órdenes 16/06/2011<br>BOJA 149 · 150 Andalucía]
+  A --> P[Programación didáctica<br>del departamento]
+  P --> D[Práctica en aula<br>unidades 00–15]
 ```
 
-<span class="fragment">Cadena: <mark>RD 686/2010 → Orden 16/06/2011 → programación</mark></span>
+<span class="fragment">Cadena: <mark>Reales Decretos → Órdenes BOJA → Programación didáctica</mark></span>
 
-<span class="fragment"><mark>BOE</mark> para el Estado · <mark>BOJA</mark> para Andalucía</span>
+<span class="fragment"><mark>BOE</mark> para el Estado · <mark>BOJA</mark> para la Comunidad Autónoma</span>
 
 Note:
-Esta cadena es la respuesta modelo cuando os pidan justificar el alcance de un contenido. El Real Decreto pone los mínimos, la Orden los desarrolla a escala andaluza y la programación del centro los concreta. Si os saltáis un eslabón, el argumento se queda cojo y el tribunal lo nota enseguida.
+Esta cadena es la respuesta modelo cuando os pidan justificar el alcance de un contenido en una prueba o memoria: el Real Decreto fija las enseñanzas mínimas, la Orden autonómica las desarrolla en Andalucía y la programación didáctica del centro las concreta en el aula.
 
 ---
 
 ## Módulo 0373 · LMH
 
-<span class="fragment">128 horas y 7 ECTS de <mark>Lenguajes de marcas</mark></span>
+<span class="fragment">128 horas y 7 ECTS de <mark>Lenguajes de marcas y SGI</mark> (DAW 1.º)</span>
 
 <span class="fragment">El bloque de CSS responde al <mark>RA 2</mark> del módulo</span>
 
@@ -137,17 +134,22 @@ Esta cadena es la respuesta modelo cuando os pidan justificar el alcance de un c
 <span class="fragment">Contenidos: estructura HTML, etiquetas, XHTML y <mark>hojas de estilo</mark></span>
 
 Note:
-El 0373 es el módulo de lenguajes de marcas del DAW y ahí se cuelan los fundamentos de CSS. El CE 2.g se responde en la unidad 01 y el CE 2.h acompaña a todo el curso. Si os preguntan en qué módulo se evalúa aplicar hojas de estilo, la respuesta es el 0373.
+El 0373 es el módulo de lenguajes de marcas del DAW (1.º) y ahí se asientan los fundamentos de CSS. El CE 2.g se responde en la unidad 01 y el CE 2.h acompaña a todo el curso.
 
 ---
 
-## Módulo 0615 · Los seis RA
+## Módulos 0615 (DIW) y 0488 (DI)
 
-<span class="fragment"><mark>RA 1</mark> planifica interfaces: color, tipografía y guía de estilo</span>
+<span class="fragment"><strong>0615 · DIW (DAW 2.º)</strong>: 126 h centradas en la web:</span>
 
-<span class="fragment"><mark>RA 2</mark> crea interfaces homogéneas con estilos y validación</span>
+<span class="fragment"><mark>RA 1 a RA 6</mark>: planificación, estilos homogéneos, multimedia, accesibilidad (WCAG) y usabilidad</span>
 
-<span class="fragment"><mark>RA 3 y RA 4</mark> integran y verifican contenido multimedia</span>
+<span class="fragment"><strong>0488 · DI (DAM 2.º)</strong>: 140 h centradas en interfaces multiplataforma:</span>
+
+<span class="fragment"><mark>RA 1 a RA 6</mark>: componentes visuales, diseño responsivo, pruebas de usabilidad y accesibilidad</span>
+
+Note:
+En DAW 2.º, 0615 aborda el diseño web desde la planificación hasta el rendimiento y las WCAG. En DAM 2.º, 0488 aplica estos mismos principios a interfaces de escritorio y móviles con frameworks de componentes. Ambos módulos convergen en CSS moderno y diseño accesible.
 
 <span class="fragment"><mark>RA 5</mark> exige interfaces accesibles según las WCAG</span>
 
@@ -267,41 +269,41 @@ Este es el cambio conceptual más importante de la unidad: CSS dejó de ser un d
 
 <span class="fragment"><mark>WHATWG</mark>: especificación de HTML en forma de Living Standard</span>
 
-<span class="fragment"><mark>WCAG</mark>: requisitos de accesibilidad que CSS debe cumplir</span>
+<span class="fragment"><mark>WCAG · UNE-EN 301549</mark>: marco de accesibilidad exigido por el <mark>RD 1112/2018</mark></span>
 
-<span class="fragment">Son la base del <mark>RA 5</mark> del 0615: contraste, foco y movimiento</span>
+<span class="fragment">Base del <mark>RA 5</mark> del 0615 y RA de accesibilidad del 0488: contraste, foco y movimiento</span>
 
-<span class="fragment"><mark>MDN Web Docs</mark>: documentación y datos de compatibilidad</span>
+<span class="fragment"><mark>MDN Web Docs</mark>: documentación de referencia y compatibilidad Can I Use</span>
 
 <span class="fragment">Validador W3C de CSS para comprobar la sintaxis de las hojas</span>
 
 Note:
-HTML y CSS son complementarios pero tienen especificaciones distintas y organismos distintas. Las WCAG no son una especificación de CSS, pero condicionan cómo escribís color, foco y animación. MDN es la fuente didáctica de estos apuntes y os va a acompañar toda la vida profesional.
+HTML y CSS son complementarios pero tienen especificaciones y organismos distintos. Las WCAG no son una especificación de CSS, pero condicionan cómo escribís color, foco y animación, y son de obligado cumplimiento legal según el Real Decreto 1112/2018 y la norma UNE-EN 301549 (conformidad AA). MDN es la fuente didáctica de estos apuntes.
 
 ---
 
 ## Error común: citar mal la norma
 
-⚠ El **RD 686/2010** no es la norma andaluza: el desarrollo es la Orden de 16/06/2011.
+⚠ Los **RD 686/2010 y RD 453/2010** son normas estatales: el desarrollo autonómico son las Órdenes de 16/06/2011.
 
-⚠ Confundir **BOE** y **BOJA**: el Estado publica en el BOE, la Consejería en el BOJA.
+⚠ Confundir **BOE** y **BOJA**: el Estado publica en el BOE, la Consejería en el BOJA (**BOJA 149** para DAW, **BOJA 150** para DAM).
 
 ⚠ Decir «CSS3 es una especificación»: lo correcto es módulo con nivel y fase.
 
-⚠ Fechar mal la Orden: es el **BOJA n.º 149, de 1 de agosto de 2011**.
+⚠ Omitir el **RD 1112/2018**: la accesibilidad web no es opcional, es imperativo legal.
 
 Note:
-Los tres primeros errores son los que más he visto en exámenes y los cuatro son de memoria, no de comprensión. El cuarto arrastra trabajos enteros mal citados. Si os dejáis un número o una fecha a medias, la referencia deja de ser utilizable y se penaliza.
+Los errores al citar la legislación restan solvencia técnica a proyectos y defensas. Recordad siempre: BOJA 149 para DAW, BOJA 150 para DAM, Reales Decretos para el marco estatal y RD 1112/2018 para la accesibilidad obligatoria.
 
 ---
 
 ## Autoevaluación
 
-¿Qué normas se citan, y en qué orden, para justificar *container queries* en una programación didáctica?
+¿Qué normas se citan, y en qué orden, para justificar *container queries* en una programación didáctica de DAW o DAM?
 
 --
 
-**RD 686/2010** → Orden de 16/06/2011 (BOJA 149, con 3 h de libre configuración) → programación didáctica del centro.
+**RD 686/2010 (DAW) o RD 453/2010 (DAM)** → Orden de 16/06/2011 (BOJA 149 / 150, con 3 h de libre configuración) → programación didáctica del centro.
 
 Note:
 Es la pregunta tipo de esta unidad y la respuesta es siempre la misma cadena de tres eslabones. Si os preguntan por BOE y BOJA, la respuesta es: Estado por el BOE y Consejería por el BOJA. Practicad la respuesta en voz alta, exactamente como la escribiríais en el examen.
@@ -310,12 +312,13 @@ Es la pregunta tipo de esta unidad y la respuesta es siempre la misma cadena de 
 
 ## Claves para el examen
 
-- **RD 686/2010** → Orden de 16/06/2011 (BOJA 149) → programación didáctica.
-- CSS en el currículo: **RA 2 del 0373** y **RA 1, 2, 5 y 6 del 0615**.
+- **RD 686/2010 (DAW) · RD 453/2010 (DAM)** → Órdenes 16/06/2011 (**BOJA 149 / 150**) → programación didáctica.
+- Marco FP: **Ley Orgánica 3/2022** y **RD 659/2023**.
+- Accesibilidad legal: **RD 1112/2018** y norma **UNE-EN 301549** (WCAG AA).
+- CSS en el currículo: **RA 2 del 0373**, **0615 (DIW)** y **0488 (DI)**.
 - «CSS3» es marketing: se citan **módulos con nivel y fase** (WD, CR, REC).
-- **W3C** estandariza CSS y WCAG; **WHATWG** mantiene HTML.
-- **3 h de libre configuración** = CSS avanzado no citado literalmente.
-- Toda cita lleva **número, fecha y diario** correctos.
+- **3 h de libre configuración** = CSS moderno y avanzado.
 
 Note:
+Reglas clave de memorización para el examen. La cadena normativa y la diferenciación BOE/BOJA junto con el marco legal de accesibilidad (RD 1112/2018) son contenidos evaluables fundamentales.
 Son seis reglas de memoria pura y son las que más se preguntan en el examen. La primera se puntúa completa o no se puntúa, así que practicadla entera. Si solo os retenéis un punto de esta lista, que sea el orden de la cadena normativa.

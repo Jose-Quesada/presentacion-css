@@ -34,19 +34,21 @@ Cinco objetivos, tres de cumplimiento y dos de criterio de diseño. El cuarto es
 
 <div style="font-size: 1em; text-align: left;">
 
-Es requisito de titulación, obligación legal en muchos contextos y condición de contrato
+Es requisito curricular, obligación legal obligatoria y condición de contrato
 </div>
 
-<span class="fragment" style="font-size: 1em;">Directiva europea de accesibilidad y legislación nacional de discapacidad</span>
+<span class="fragment" style="font-size: 1em;">Obligación legal: <mark>Real Decreto 1112/2018</mark> (sitios web y apps móviles del sector público)</span>
 
-<span class="fragment" style="font-size: 1em;">Los contratos públicos piden declarar y verificar la conformidad AA</span>
+<span class="fragment" style="font-size: 1em;">Norma técnica de referencia: <mark>UNE-EN 301549</mark> y directivas europeas</span>
+
+<span class="fragment" style="font-size: 1em;">Los contratos públicos y auditorías exigen verificar la conformidad <mark>WCAG 2.1 / 2.2 AA</mark></span>
 
 <span class="fragment" style="font-size: 1em;">Un teclado sin foco visible deja la web inutilizable para muchos usuarios</span>
 
-<span class="fragment" style="font-size: 1em;">Mejora para todo el mundo: texto legible, objetivos grandes, estados claros</span>
+<span class="fragment" style="font-size: 1em;">Mejora universal: texto legible, objetivos grandes, contraste y navegación predecible</span>
 
 Note:
-La accesibilidad se percibe como trámite y es justo al revés: es lo que separa un prototipo de un producto entregable. Además, gran parte del trabajo es CSS bien escrito, no tecnología especial. Y lo que ayuda a una persona con discapacidad motriz ayuda a quien va con prisa en el móvil.
+La accesibilidad web no es opcional: el Real Decreto 1112/2018 y la norma europea armonizada UNE-EN 301549 obligan a garantizar un nivel de conformidad WCAG AA en administraciones públicas y empresas prestadoras de servicios básicos. Gran parte del cumplimiento depende directamente de un CSS bien estructurado.
 
 ---
 
@@ -298,6 +300,51 @@ El orden importa: la automatización al final sirve para confirmar, no para desc
 
 Note:
 Conviene tener dos de estas herramientas en la rutina, una en el navegador y una en la integración continua. El contraste se mide con cualquiera de las de color, y el resultado es un número que se puede documentar. Ninguna sustituye al recorrido con teclado y lector de pantalla.
+
+---
+
+## Ejemplo práctico · Interfaz totalmente accesible y modo forzado (WCAG 2.1)
+
+```css
+/* 1. Patrón canónico de ocultación accesible para lectores */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px; margin: -1px;
+  padding: 0; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
+/* 2. Foco interactivo reforzado y visible (Criterio WCAG 2.4.7) */
+:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px; /* Separa el anillo para evitar solapes */
+}
+
+/* 3. Modo de contraste forzado del sistema operativo */
+@media (forced-colors: active) {
+  .tarjeta-soporte {
+    border: 2px solid CanvasText;  /* Texto de lienzo del sistema */
+  }
+  .boton-accion {
+    border: 2px solid ButtonText;  /* Garantiza botón visible */
+  }
+  :focus-visible {
+    outline: 3px solid Highlight;
+  }
+}
+```
+
+<span class="fragment"><code>.visually-hidden</code> conserva el texto en el árbol de accesibilidad sin ocupar espacio</span>
+
+<span class="fragment"><code>:focus-visible</code> activa el anillo solo para navegación por teclado, no con clic de ratón</span>
+
+<span class="fragment"><code>@media (forced-colors: active)</code> restituye bordes y colores de sistema en Windows High Contrast</span>
+
+Note:
+Diseño accesible y adaptaciones del sistema:
+1. .visually-hidden: no usar display: none ni visibility: hidden (ambos destruyen el nodo del árbol de accesibilidad). Esta clase de 6 propiedades mantiene el texto 100% audible para personas con ceguera sin descolocar la interfaz.
+2. :focus-visible con outline-offset: 3px: elimina el molesto borde al hacer clic con ratón pero despliega un indicador nítido de alto contraste al tabular con teclado, cumpliendo el criterio WCAG 2.4.7 y 2.4.11.
+3. Modo de contraste forzado: cuando un usuario activa el tema de alto contraste en Windows, el navegador ignora los background-color decorativos. Emplear palabras clave del sistema (ButtonText, CanvasText, Highlight) garantiza que los botones y tarjetas no se conviertan en cajas invisibles.
 
 ---
 

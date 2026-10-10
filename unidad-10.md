@@ -304,6 +304,50 @@ El flujo empieza siempre por el contenido en una sola columna. Solo si el diseñ
 
 ---
 
+## Ejemplo práctico · Portal con Container Queries y sintaxis de rango
+
+```css
+/* 1. Mobile-First: diseño base y áreas táctiles ergonómicas */
+.boton-noticia {
+  min-height: 44px; min-width: 44px; /* Objetivo táctil WCAG 2.5.5 */
+  padding: .75rem 1.25rem;
+}
+
+/* 2. Sintaxis de rango moderna y legible (Media Queries Level 4) */
+@media (width >= 48em) {
+  .rejilla-noticias { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+}
+
+/* 3. Container Queries: el componente se adapta a su padre, no al viewport */
+.noticia-wrapper {
+  container-type: inline-size;
+  container-name: tarjeta-noticia;
+}
+
+@container tarjeta-noticia (width >= 450px) {
+  .tarjeta-noticia {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 1rem;
+  }
+}
+```
+
+<span class="fragment">Sintaxis de rango <code>(width &gt;= 48em)</code> más intuitiva que el clásico <code>min-width</code></span>
+
+<span class="fragment"><code>container-type: inline-size</code> dota al componente de inteligencia contextual</span>
+
+<span class="fragment">Áreas de toque mínimas de 44&times;44 px para usabilidad motriz en pantallas táctiles</span>
+
+Note:
+Revolución en la arquitectura responsive:
+1. Mobile-First: se maqueta inicialmente para pantallas reducidas (una columna) y las media queries solo añaden complejidad incremental hacia arriba.
+2. Sintaxis de rango (width >= 48em): más legible que @media (min-width: 768px), usando unidades em para respetar las preferencias de aumento de tamaño de fuente del sistema operativo.
+3. Container Queries: resuelven el talón de Aquiles histórico de los Media Queries. Una tarjeta situada en una barra lateral estrecha se verá en modo vertical, mientras que la misma tarjeta situada en el cuerpo principal se transformará automáticamente a horizontal, independientemente del ancho total de la pantalla.
+4. WCAG 2.5.5 (Target Size): los botones y enlaces táctiles deben tener al menos 44x44 px de área interactiva para evitar errores de pulsación accidental.
+
+---
+
 ## Error común: desktop-first y breakpoints en px
 
 ⚠ Empezar con `max-width`: overrides encadenados

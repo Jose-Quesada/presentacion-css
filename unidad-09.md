@@ -120,8 +120,8 @@ AVIF comprime entre un 20 y un 50 % menos que WebP con la misma calidad. El PNG 
 ## srcset y sizes · el navegador elige
 
 ```html
-<img src="foto-800.webp"
-     srcset="foto-400.webp 400w, foto-800.webp 800w, foto-1600.webp 1600w"
+<img src="https://dummyimage.com/800x600/ccc/000.png&text=foto-800.webp"
+     srcset="https://dummyimage.com/400x300/ccc/000.png&text=foto-400.webp 400w, https://dummyimage.com/800x600/ccc/000.png&text=foto-800.webp 800w, https://dummyimage.com/800x600/ccc/000.png&text=foto-1600.webp 1600w"
      sizes="(max-width: 600px) 100vw, 50vw"
      alt="Descripción de la foto"
      width="800" height="600" loading="lazy">
@@ -284,6 +284,50 @@ El skeleton necesita un degradado más ancho que la caja y desplazar el fondo en
 
 Note:
 Es el árbol de decisión que conviene repetir en cada componente con imagen. Primero se decide la semántica, después el formato y por último el modo de servirlo. Si invertís el orden acabáis con fotos de contenido metidas en fondos. El último paso evita retrasar el elemento más grande de la página.
+
+---
+
+## Ejemplo práctico · Hero banner con degradados, glassmorphism y clip-path
+
+```css
+.hero-banner {
+  /* Fondo multicapa: iluminación radial sobre degradado angular */
+  background:
+    radial-gradient(circle at 80% 20%, rgb(99 102 241 / .4), transparent 50%),
+    linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%); /* Recorte diagonal */
+  padding: 4rem 2rem;
+}
+
+.tarjeta-cristal {
+  background: rgb(255 255 255 / .12);
+  backdrop-filter: blur(12px); /* Desenfoque de lo que queda detrás */
+  border: 1px solid rgb(255 255 255 / .25);
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .tarjeta-cristal {
+    backdrop-filter: none;
+    background: #1e293b; /* Opaco accesible para legibilidad */
+  }
+}
+```
+
+<span class="fragment">Degradados múltiples en una sola declaración para iluminaciones complejas</span>
+
+<span class="fragment"><code>backdrop-filter: blur()</code> genera estética glassmorphism en tiempo real</span>
+
+<span class="fragment"><code>clip-path: polygon()</code> recorta siluetas geométricas aceleradas por GPU</span>
+
+<span class="fragment">Accesibilidad: <code>prefers-reduced-transparency</code> aporta fondo opaco a quien lo requiera</span>
+
+Note:
+Técnicas de decoración y estilado gráfico avanzado:
+1. Composición de fondos: background admite múltiples capas separadas por comas. El radial-gradient simula un foco de luz dinámico que se funde con el fondo oscuro general.
+2. backdrop-filter: desenfoca y satura exclusivamente el contenido que está físicamente por debajo de la tarjeta, creando un acabado visual sofisticado sin recurrir a Photoshop ni assets pesados.
+3. clip-path: polygon() recorta la caja sin afectar a las sombras proyectadas ni al flujo de lectura de los hijos.
+4. Consulta de medios prefers-reduced-transparency: vital para personas con déficit de contraste o problemas neurológicos, sustituyendo la transparencia por un color sólido y nítido.
 
 ---
 

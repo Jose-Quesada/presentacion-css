@@ -163,6 +163,28 @@ Los tres factores de flex describen el algoritmo de reparto: base, crecimiento y
 Note:
 La regla de oro: con `flex: 1` en varios items, los anchos son proporcionales a sus factores. La base `0%` hace que el contenido no tenga voz ni voto. Con `flex: auto` el tamaño natural sí influye y por eso los resultados cambian. Por eso dos paneles con `flex: 1` quedan idénticos aunque su texto no.
 
+--
+
+## Aritmética de Flexbox: El reparto del pastel
+
+```text
+Contenedor: 1000px libre. Dos hijos con flex-basis: 300px (suma = 600px).
+Sobra pastel: 1000px − 600px = 400px de espacio libre.
+```
+
+<span class="fragment"><strong>flex-basis (punto de partida):</strong> tamaño inicial que pide cada caja antes de repartir.</span>
+
+<span class="fragment"><strong>flex-grow (reparto positivo):</strong> Si Hijo 1 tiene <code>flex-grow: 1</code> e Hijo 2 tiene <code>flex-grow: 3</code>:<br>
+$\rightarrow$ Se dividen los 400px sobrantes en 4 partes (100px/parte).<br>
+$\rightarrow$ Hijo 1 recibe 1 parte (+100px) $\rightarrow$ <strong>400px final</strong>.<br>
+$\rightarrow$ Hijo 2 recibe 3 partes (+300px) $\rightarrow$ <strong>600px final</strong>.</span>
+
+<span class="fragment"><strong>flex-shrink (sacrificio):</strong> Factor de compresión si no caben; <code>flex-shrink: 0</code> vuelve al elemento 100% rígido e indeformable (ideal para avatares e iconos).</span>
+
+Note:
+Explicación clave para el aula:
+flex-grow no define anchos absolutos, define cómo se reparte el sobrante. Por eso flex: 1 (que tiene basis 0%) reparte el 100% del contenedor por igual entre todos los hermanos.
+
 ---
 
 ## Cómo se calcula el tamaño final
@@ -274,6 +296,48 @@ Dibujad este esquema antes de tocar cualquier propiedad: primero identificad el 
 
 Note:
 Ambos modelos se complementan, no compiten. Flex brilla cuando el contenido decide el tamaño; grid brilla cuando decides la estructura antes. En un proyecto real usareis grid para el esqueleto de la página y flex dentro de cada componente. Ambos comparten `gap` y las mismas keywords de alineación.
+
+---
+
+## Ejemplo práctico · Catálogo de tarjetas con alineación vertical perfecta
+
+```css
+.catalogo {
+  display: flex;
+  flex-wrap: wrap;        /* Pasa a la siguiente línea si no cabe */
+  gap: 1.5rem;            /* Espacio uniforme sin colapsos */
+}
+
+.tarjeta {
+  display: flex;
+  flex-direction: column; /* Eje principal vertical */
+  flex: 1 1 18rem;        /* Crecimiento equitativo con base de 18rem */
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.tarjeta__cuerpo {
+  min-width: 0;           /* Resuelve el bug de texto largo que desborda */
+}
+
+.tarjeta__pie {
+  margin-top: auto;       /* Push margin: alinea todos los botones al fondo */
+}
+```
+
+<span class="fragment"><code>flex: 1 1 18rem</code> permite un layout fluido y adaptativo sin media queries</span>
+
+<span class="fragment"><code>margin-top: auto</code> en el pie absorbe el sobrante vertical de la tarjeta</span>
+
+<span class="fragment"><code>min-width: 0</code> desactiva la protección mínima automática que desborda contenedores</span>
+
+Note:
+Patrón profesional de UI con Flexbox:
+1. flex-wrap: wrap con gap: 1.5rem crea una rejilla fluida que se adapta automáticamente al ancho disponible sin obligar a usar breakpoints fijos.
+2. flex: 1 1 18rem: las tarjetas ocupan un mínimo de 18rem y crecen equitativamente para rellenar la última fila.
+3. margin-top: auto: en un contenedor con flex-direction: column, un margen automático en el eje principal empuja el elemento al extremo opuesto. Esto garantiza que todos los botones de compra queden milimétricamente alineados en la misma línea visual independientemente de si la descripción del curso tiene dos líneas o seis.
+4. min-width: 0: imprescindible para permitir que textos con white-space: nowrap o elipsis se recorten correctamente sin reventar la celda flex.
 
 ---
 

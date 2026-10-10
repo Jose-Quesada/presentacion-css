@@ -277,6 +277,48 @@ La flecha de marcos a iframe es importante: los frames de layout desaparecieron,
 
 ---
 
+## Ejemplo práctico · Maquetación editorial con multicolumna y BFC
+
+```css
+/* 1. Multicolumna adaptativa para lectura continua */
+.articulo-editorial {
+  columns: 2 18rem;                /* 2 columnas con ancho mínimo de 18rem */
+  column-gap: 2rem;
+  column-rule: 1px solid #e0e0e0;  /* Línea divisoria elegante */
+}
+
+/* 2. Titular expandido transversalmente */
+.articulo-editorial__titular {
+  column-span: all;
+  margin-bottom: 1.5rem;
+}
+
+/* 3. Prevenir cortes huérfanos de bloques */
+.tarjeta-destacada {
+  break-inside: avoid;             /* No se fractura entre dos columnas */
+}
+
+/* 4. Tabla con algoritmo de dimensionado determinista */
+.tabla-datos {
+  table-layout: fixed; width: 100%;
+}
+```
+
+<span class="fragment"><code>columns: 2 18rem</code> adapta el número de columnas automáticamente en móvil y escritorio</span>
+
+<span class="fragment"><code>column-span: all</code> interrumpe el flujo multicolumna para titulares panorámicos</span>
+
+<span class="fragment"><code>break-inside: avoid</code> impide que un bloque o figura quede partido a la mitad</span>
+
+Note:
+Patrones editoriales avanzados:
+1. columns: 2 18rem es la forma abreviada de column-count y column-width. Si la pantalla mide menos de 36rem (+ gaps), el navegador renderiza una sola columna automáticamente sin media queries.
+2. column-span: all permite que un encabezado o imagen hero abarque todo el ancho del artículo, reiniciando las columnas por debajo.
+3. break-inside: avoid (y page-break-inside) es crucial en cajas de llamada, citas o figuras para que el lector no vea media tarjeta al final de una columna y la otra media al inicio de la siguiente.
+4. table-layout: fixed calcula anchos en base a la primera fila, acelerando el renderizado de tablas extensas.
+
+---
+
 ## Error común: overflow hidden para crear BFC
 
 ⚠ `overflow: hidden` <mark>recorta</mark> tooltips y sombras

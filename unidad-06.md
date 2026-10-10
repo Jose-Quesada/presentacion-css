@@ -238,6 +238,24 @@ Esta es la declaración responsiva más famosa de CSS moderno: una sola línea y
 Note:
 Pregunta de examen clásica: cuántas columnas caben con un minmax y un gap dados. `auto-fill` piensa en el futuro y deja huecos; `auto-fit` estira lo que hay. Con el ejemplo de 200 px y 20 px de gap en 1000 px caben exactamente cuatro columnas.
 
+--
+
+## ¿Cuándo usar auto-fit y cuándo auto-fill?
+
+<span class="fragment"><strong>El caso clave:</strong> Solo tienes 2 tarjetas en una pantalla panorámica de 4K donde cabrían 6 columnas de 250px.</span>
+
+<span class="fragment"><strong>auto-fit (colapsa huecos a cero):</strong> Las columnas vacías desaparecen y las 2 tarjetas se estiran ocupando el 50% de la pantalla cada una. <mark>Es lo deseado en el 95% de galerías.</mark></span>
+
+<span class="fragment"><strong>auto-fill (mantiene huecos creados):</strong> Las 2 tarjetas miden sus 250px a la izquierda y la derecha queda vacía esperando nuevos elementos.</span>
+
+<span class="fragment"><strong>Truco anti-desborde móvil:</strong> <code>minmax(min(100%, 250px), 1fr)</code> evita scroll horizontal si la pantalla mide menos de 250px.</span>
+
+Note:
+Explicación clave para el aula:
+1. auto-fit adapta y ensancha los elementos presentes.
+2. auto-fill llena la cuadrícula con celdas invisibles que no se estiran.
+3. La fórmula matemática es: min·n + gap·(n − 1) ≤ ancho disponible.
+
 ---
 
 ## Subgrid
@@ -298,6 +316,42 @@ grid-row: 2          -> la segunda fila
 
 Note:
 Dibujad esta retícula antes de resolver cualquier ejercicio de colocación: numerad las líneas y ya podéis escribir `grid-column` sin dudar. Recordad que las líneas negativas cuentan hacia atrás desde el final. Con el mapa delante, colocar por líneas o por áreas es directo.
+
+---
+
+## Ejemplo práctico · Dashboard responsivo con Grid y auto-fit
+
+```css
+.dashboard {
+  display: grid;
+  /* Rejilla fluida sin media queries y a prueba de móviles estrechos */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1.5rem;
+}
+
+.kpi-destacado {
+  grid-column: span 2;  /* Se expande a dos columnas si caben */
+}
+
+.kpi-resumen {
+  display: grid;
+  place-items: center;  /* Centrado horizontal y vertical en una línea */
+  min-height: 120px;
+}
+```
+
+<span class="fragment"><code>auto-fit</code> calcula y expande dinámicamente las columnas según el espacio</span>
+
+<span class="fragment"><code>min(100%, 15rem)</code> previene el desbordamiento horizontal en pantallas &lt; 240px</span>
+
+<span class="fragment"><code>place-items: center</code> centra contenidos bidimensionalmente de forma concisa</span>
+
+Note:
+La fórmula maestra del diseño moderno con CSS Grid:
+1. repeat(auto-fit, minmax(min(100%, 15rem), 1fr)): genera tantas columnas de al menos 15rem como quepan en la pantalla y reparte el espacio sobrante por igual (1fr). Si no hay espacio, envuelve a la siguiente fila sin necesidad de @media queries.
+2. La función min(100%, 15rem) actúa como salvaguarda: si un móvil tiene una pantalla de 300px (menor que 15rem = 240px), la columna nunca superará el 100% del ancho del viewport, eliminando el scroll horizontal accidental.
+3. grid-column: span 2: hace que los widgets prioritarios (KPIs, gráficos) ocupen el doble de ancho siempre que el layout disponga de al menos dos columnas.
+4. place-items: center: atajo sintáctico de align-items y justify-items para centrar métricas y cifras.
 
 ---
 
